@@ -36,7 +36,7 @@ def selectDir():
 
 def cmd():
     try:
-        find.find(DirPath.get(), FileSuffix.get(), Content.get(), EncodingFormat.get())
+        find.find(DirPath.get(), FileSuffix.get(), Content.get())
         showResult()
     except Exception as e:
         scrtext.config(state='normal')
@@ -62,7 +62,7 @@ def showResult():
             if not text:
                 break
     else:
-        scrtext.insert(END, r"不存在以[" + FileSuffix.get() + r"]为后缀的文件，或该后缀文件中不存在[" + Content.get() + "]")
+        scrtext.insert(END, r"不存在以[" + FileSuffix.get() + r"]为后缀的文件，或该后缀文件中没有包含[" + Content.get() + "]内容的行")
     f.close()
     scrtext.config(state='disabled')
 
@@ -88,7 +88,7 @@ root = Tk()
 
 # root.iconbitmap('icon.ico')
 
-root.title('Finder(v1.1_20180910)')
+root.title('Finder(v1.1_20190423)')
 
 center_window(root, 800, 500)
 root.resizable(False, False)
@@ -113,11 +113,11 @@ suffixLabel = Label(root, text="文件后缀：")
 suffixEntry = Entry(root, textvariable=FileSuffix)
 # suffixEntry.bind("<KeyPress>", lambda e : "break")
 
-formatLabel = Label(root, text="编码：")
-formatChosen = ttk.Combobox(root, width=12, textvariable=EncodingFormat, state='readonly')
-formatChosen['values'] = ('gbk', 'utf-8')     # 设置下拉列表的值
-formatChosen.grid(column=1, row=1)      # 设置其在界面中出现的位置  column代表列   row 代表行
-formatChosen.current(0)    # 设置下拉列表默认显示的值，0为 numberChosen['values'] 的下标值
+# formatLabel = Label(root, text="编码：")
+# formatChosen = ttk.Combobox(root, width=12, textvariable=EncodingFormat, state='readonly')
+# formatChosen['values'] = ('gbk', 'utf-8')     # 设置下拉列表的值
+# formatChosen.grid(column=1, row=1)      # 设置其在界面中出现的位置  column代表列   row 代表行
+# formatChosen.current(0)    # 设置下拉列表默认显示的值，0为 numberChosen['values'] 的下标值
 
 
 contentLabel = Label(root, text="查询内容：")
@@ -140,14 +140,14 @@ btnselectDir.place(x=720, y=10, width=50, height=25)
 suffixLabel.place(x=5, y=50, width=100, height=25)
 suffixEntry.place(x=100, y=50, width=100, height=25)
 
-formatLabel.place(x=210, y=50, width=40, height=25)
-formatChosen.place(x=250, y=50, width=50, height=25)
+# formatLabel.place(x=210, y=50, width=40, height=25)
+# formatChosen.place(x=250, y=50, width=50, height=25)
 
-contentLabel.place(x=300, y=50, width=100, height=25)
-contentEntry.place(x=380, y=50, width=300, height=25)
+contentLabel.place(x=210, y=50, width=100, height=25)
+contentEntry.place(x=300, y=50, width=380, height=25)
 
 
 btnstart.place(x=720, y=50, width=50, height=25)
 scrtext.place(x=10, y=90, width=780, height=390)
-copyRightLabel.place(x=470, y=480, width=400, height=25)
+copyRightLabel.place(x=490, y=480, width=400, height=25)
 mainloop()
