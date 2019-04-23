@@ -104,7 +104,7 @@ Content = StringVar()
 # 编码格式
 EncodingFormat = StringVar()
 
-dirLabel = Label(root, text="文件夹：")
+dirLabel = Label(root, text="文件路径：")
 dirEntry = Entry(root, textvariable=DirPath)
 dirEntry.bind("<KeyPress>", lambda e: "break")
 btnselectDir = Button(root, text="浏览", command=selectDir)
