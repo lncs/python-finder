@@ -6,6 +6,8 @@ from tkinter.scrolledtext import ScrolledText
 from tkinter import messagebox
 import tkinter.filedialog as tkFileDialog
 import find as find
+
+from logpublic import *
 # from icon import img
 
 
@@ -25,34 +27,37 @@ def center_window(root, width, height):
     root.geometry(size)
 
 
-def selectDir():
+def select_dir():
 
     # dirPath = tkFileDialog.askopenfilename(filetypes=[("files","*.xlsx;*.xls")], initialdir = './')
-    dirPath = tkFileDialog.askdirectory()
+    dir_path = tkFileDialog.askdirectory()
 
-    DirPath.set(dirPath)
-    showFiles(DirPath.get())
+    DirPath.set(dir_path)
+    show_files(DirPath.get())
 
 
 def cmd():
     try:
+        app_logger.info("开始运行查询程序...")
         find.find(DirPath.get(), FileSuffix.get(), Content.get())
-        showResult()
+        show_result()
+        app_logger.info("查询程序运行完成...")
     except Exception as e:
+        app_logger.error("程序运行出现异常:{}".format(e))
         scrtext.config(state='normal')
         scrtext.delete(1.0, END)
         scrtext.insert(END, r"ERROR:" + str(e))
         scrtext.config(state='disabled')
 
 
-def showResult():
+def show_result():
     scrtext.config(state='normal')
     scrtext.delete(1.0, END)
     scrtext.update()
     scrtext.see(END)
 
-    f = open(DirPath.get() + '/result.txt', 'r+', encoding='utf-8')
-    if os.path.getsize(DirPath.get() + '/result.txt'):
+    f = open('result.txt', 'r+', encoding='utf-8')
+    if os.path.getsize('result.txt'):
         while 1:
             text = f.readline()
             scrtext.insert(END, text)
@@ -67,7 +72,7 @@ def showResult():
     scrtext.config(state='disabled')
 
 
-def showFiles(path):
+def show_files(path):
     scrtext.config(state='normal')
     scrtext.delete(1.0, END)
     scrtext.update()
@@ -88,7 +93,7 @@ root = Tk()
 
 # root.iconbitmap('icon.ico')
 
-root.title('Finder(v1.1_20190423)')
+root.title('Finder(V1.2_20190613)')
 
 center_window(root, 800, 500)
 root.resizable(False, False)
@@ -107,7 +112,7 @@ EncodingFormat = StringVar()
 dirLabel = Label(root, text="文件路径：")
 dirEntry = Entry(root, textvariable=DirPath)
 dirEntry.bind("<KeyPress>", lambda e: "break")
-btnselectDir = Button(root, text="浏览", command=selectDir)
+btnselectDir = Button(root, text="浏览", command=select_dir)
 
 suffixLabel = Label(root, text="文件后缀：")
 suffixEntry = Entry(root, textvariable=FileSuffix)
