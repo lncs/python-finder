@@ -1,1 +1,1 @@
-pyinstaller -F -w finder.py
+pyinstaller -F -w -i icon.ico finder.py
