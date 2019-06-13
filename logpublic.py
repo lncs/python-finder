@@ -127,7 +127,7 @@ app_logger = log_building(log_name)
 if (log_level and get_log_level(log_level)):
     app_logger.setLevel(get_log_level(log_level))
 else:
-    app_logger.warning("当前配置的日志级别为{}, 为未定义的日志级别,按照默认级别3(WARNING)处理".format(log_level))
+    app_logger.warning("当前配置的日志级别为{},按照默认级别3(WARNING)处理".format(log_level))
 
 if __name__ == '__main__':
     # dict_info = get_config_info("conf.ini")
