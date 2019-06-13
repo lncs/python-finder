@@ -63,17 +63,22 @@ def log_building(log_name='runlog'):
 
 def get_config_info(fpath):
     try:
+        # 记事本打开ini文件之后，会存在 \ufeff 的问题,文件最好使用gbk保存
         conf_dict = {}
-        cfg = configparser.SafeConfigParser()
+        cfg = configparser.ConfigParser()
         cfg.read(fpath)
+        # 遍历sections内容
         for section in cfg.sections():
             # 将ini中的item组合到字典中,key=section+_option
+            # 获取指定section中的options
+            # print(cfg.items(section))
             for item in cfg.items(section):
+                # print(item)
                 key = section + '_' + item[0]
                 value = item[1]
                 if conf_dict.get(key, None) == None:
                     conf_dict[key] = value
-
+        print(conf_dict)
         return conf_dict
     except Exception as e:
         raise e
@@ -115,11 +120,10 @@ log_name = date_str + "-runlog"
 conf_info = get_config_info('conf.ini')
 # get log level
 log_level = conf_info.get('log_def_level')
-
+print('配置文件中设置的日志级别为:{}'.format(log_level))
 # 不传入按时间格式生成的文件名,取默认值 runlog
 app_logger = log_building(log_name)
-print(get_log_level(log_level))
-print(log_level)
+
 if (log_level and get_log_level(log_level)):
     app_logger.setLevel(get_log_level(log_level))
 else:
