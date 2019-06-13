@@ -17,6 +17,8 @@ import configparser
         app_logger.error("app_logger error")
         app_logger.critical("app_logger critical")
 """
+
+
 def log_building(log_name='runlog'):
     try:
         # create logger
@@ -62,6 +64,10 @@ def log_building(log_name='runlog'):
 
 
 def get_config_info(fpath):
+    """
+    :param fpath: ini文件
+    :return: ini文件中的key-value字典
+    """
     try:
         # 记事本打开ini文件之后，会存在 \ufeff 的问题,文件最好使用gbk保存
         conf_dict = {}
@@ -85,6 +91,10 @@ def get_config_info(fpath):
 
 
 def get_log_level(level):
+    """
+    :param level: 日志级别
+    :return: logging模块中对应的日志级别
+    """
     DEBUG_LEVEL = {'CRITICAL': logging.CRITICAL,
                    'ERROR': logging.ERROR,
                    'WARNING': logging.WARNING,
@@ -104,30 +114,42 @@ def get_log_level(level):
         raise e
 
 
-# create logs file folders
-logs_dir = os.path.join(os.path.curdir, "logs")
-if os.path.exists(logs_dir) and os.path.isdir(logs_dir):
-    pass
-else:
-    os.mkdir(logs_dir)
+def create_logs_floder():
+    # create logs file folders
+    logs_dir = os.path.join(os.path.curdir, "logs")
+    if os.path.exists(logs_dir) and os.path.isdir(logs_dir):
+        pass
+    else:
+        os.mkdir(logs_dir)
 
-# get current time & set log name
-i = datetime.datetime.now()
-date_str = str(i.year) + "-" + str(i.month) + "-" + str(i.day)
-log_name = date_str + "-runlog"
 
-# get config info
-conf_info = get_config_info('conf.ini')
-# get log level
-log_level = conf_info.get('log_def_level')
-print('配置文件中设置的日志级别为:{}'.format(log_level))
-# 不传入按时间格式生成的文件名,取默认值 runlog
-app_logger = log_building(log_name)
+def set_logname():
+    # get current time & set log name
+    i = datetime.datetime.now()
+    date_str = str(i.year) + "-" + str(i.month) + "-" + str(i.day)
+    log_name = date_str + "-runlog"
+    return log_name
+
+
+def get_config_level():
+    # get config info
+    conf_info = get_config_info('conf.ini')
+    # get log level
+    log_level = conf_info.get('log_def_level')
+    print('配置文件中设置的日志级别为:{}'.format(log_level))
+    return log_level
+
+
+# 程序启动即执行的内容
+create_logs_floder()
+log_level = get_config_level()
+app_logger = log_building(set_logname())
 
 if (log_level and get_log_level(log_level)):
     app_logger.setLevel(get_log_level(log_level))
 else:
     app_logger.warning("当前配置的日志级别为{},按照默认级别3(WARNING)处理".format(log_level))
+
 
 if __name__ == '__main__':
     # dict_info = get_config_info("conf.ini")
